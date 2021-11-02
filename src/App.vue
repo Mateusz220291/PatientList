@@ -1,16 +1,16 @@
 <template>
   <div>
     <h1>Lista pacjentów</h1>
-    <div v-for="patient in patients" v-bind:key="patient.id">
-      <p class="patient">{{ patient.name }} {{ patient.lastName }}</p>
-      <div
-        class="medicine"
-        v-for="medicine in medicines"
-        v-bind:key="medicine.id"
-      >
-        {{
-          medicine.patientIds[0] === patient.id ? medicine.medicationName : null
-        }}
+
+    <div class="container" v-for="patient in patients" v-bind:key="patient.id">
+      <div class="patient">
+        Imię i nazwisko:{{ patient.name }} {{ patient.lastName }}
+      </div>
+      <h1>LEKI:</h1>
+      <div v-for="medicine in medicines" v-bind:key="medicine.id">
+        <h1 v-if="medicine.patientIds.includes(patient.id)">
+          {{ medicine.medicationName }}
+        </h1>
       </div>
     </div>
   </div>
@@ -33,7 +33,6 @@ export default {
         .get("https://cerber.pixel.com.pl/api/patients")
         .then((response) => {
           this.patients = response.data;
-          console.log(this.patients);
         })
         .catch((error) => {
           console.log(error);
@@ -44,15 +43,11 @@ export default {
         .get("https://cerber.pixel.com.pl/api/medicine")
         .then((response) => {
           this.medicines = response.data;
-          console.log(this.medicines);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-
-    filterPatients30() {},
-    filterPatients83() {},
   },
   beforeMount() {
     this.getPatients();
@@ -64,5 +59,7 @@ export default {
 <style scoped>
 .patient {
   color: red;
+}
+.container {
 }
 </style>
